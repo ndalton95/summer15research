@@ -14,29 +14,30 @@ echo "FASTQ directory: "$FQ_DIR
 
 ## quality control and read trimming
 #pathoqc -1 1A.fastq -m 30 -q 3 -e 50 -d 14 -p 8
-#for FILE in $FQ_DIR/*.fastq
+#for FILE_PATH in $FQ_DIR/*.fastq
 #do
-#       pathoqc -1 $FILE -o $FQ_DIR -m 30 -q 3 -e 50 -d 14 -p 8
+# FILE=$(basename $FILE_PATH)
+# pathoqc -1 $FILE -o $FQ_DIR -m 30 -q 3 -e 50 -d 14 -p 8
 #done
 
 
 ##Alignment 
 echo "Beginning PathoMap"
 
-#for FILE in $FQ_DIR/*_tr.fq #with pathoQC ????? the ending extension? 
+#for FILE_PATH in $FQ_DIR/*_tr.fq #with pathoQC ????? the ending 
+extension? 
 do 
+	FILE=$(basename $FILE_PATH)
 	echo "Aligning "$FILE
-	pathoscope MAP -U $FILE -outDir $FQ_DIR -outAlign 
-${FILE##*/}.sam -expTag ${FILE##*/} -indexDir $LIB_DIR 
--targetIndexPrefixes $TARGET -filterIndexPrefixes $FILTER
+	pathoscope MAP -U $FILE -outDir $FQ_DIR -outAlign ${FILE##*/}.sam -expTag ${FILE##*/} -indexDir $LIB_DIR -targetIndexPrefixes $TARGET -filterIndexPrefixes $FILTER
 	rm $FILE-* #clean up extra files
 done
 
 ## Pathogen Detection
 echo "Beginning PathoID"
-for FILE in $FQ_DIR/*.fastq.sam
+for FILE_PATH in $FQ_DIR/*.fastq.sam
 do 
+	FILE=$(basename $FILE_PATH)
 	echo "Pathogen detection on: "$FILE
-	pathoscope ID -alignFile $FILE -outDir $FQ_DIR -expTag 
-${FILE##*/} 
+	pathoscope ID -alignFile $FILE -outDir $FQ_DIR -expTag ${FILE##*/} 
 done
