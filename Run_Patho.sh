@@ -40,12 +40,3 @@ do
 	pathoscope ID -alignFile $FILE -outDir $FQ_DIR -expTag 
 ${FILE##*/} 
 done
-
-
-
-
-
-
-	echo 'Your file path is '$FILE
-FILE_ONE=$(basename $FILE)
-FILE_TWO=${FILE_ONE//_1*}_2.clipped.fastq.gz    #FOR CLIPPED FILES
