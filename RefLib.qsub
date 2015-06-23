@@ -1,0 +1,30 @@
+#!/bin/bash -l
+#
+#$ -cwd
+#$ -N __________RefLib
+#$ -o __________RefLib_Log 
+#$ -j y
+#$ -m be
+#$ -M njdalton@bu.edu
+
+#$ -P pathoscope
+
+echo "=========================================================="
+echo "Starting on       : $(date)"
+echo "Running on node   : $(hostname)"
+echo "Current job ID    : $JOB_ID"
+echo "Current job name  : $JOB_NAME"
+echo "Task index number : $TASK_ID"
+echo "=========================================================="
+
+# Build the reference library for ____________
+
+module load python/2.7.7
+cd /restricted/projectnb/pathoscope/reflib
+python /restricted/projectnb/pathoscope/code/PathoScope/pathoscope/pathoscope2.py LIB -genomeFile /restricted/projectnb/pathoscope/reflib/nt_ti.fa -taxonIds --subTax -outPrefix ___________
+cd /restricted/projectnb/pathoscope/reflib/index
+python /restricted/projectnb/pathoscope/code/PathoScope/pathoscope/pathoscope2.py MAP -filterRefFiles ../YOURINDEX_ti.fa -U ../example/H1-m120804_081736_42136_c100335062550000001523020609201277_s1_p0.ccs.fastq
+
+echo "=========================================================="
+echo "Finished on       : $(date)"
+echo "=========================================================="
